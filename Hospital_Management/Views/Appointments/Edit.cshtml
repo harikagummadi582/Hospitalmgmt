@@ -1,0 +1,131 @@
+﻿@model Hospital_Management.Models.Appointment
+
+@{
+    ViewData["Title"] = "Edit";
+    var userType = Context.Session.GetString("UserType");
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <h2 class="text-center">Edit Appointment Details</h2>
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="AppointmentID" />
+            <div class="form-group my-2">
+                <label asp-for="PatientID" class="control-label my-2"></label>
+                <div class="text-center">
+                    <select asp-for="PatientID" class="form-control" disabled asp-items="ViewBag.PatientID"></select>
+                </div>
+                <span asp-validation-for="PatientID" class="text-danger"></span>
+            </div>
+            <div class="form-group my-2">
+                <label asp-for="DoctorID" class="control-label my-2"></label>
+                <div class="text-center">
+                    <select asp-for="DoctorID" class="form-control" asp-items="ViewBag.DoctorID"></select>
+                </div>
+                <span asp-validation-for="DoctorID" class="text-danger"></span>
+            </div>
+            <div class="form-group my-2">
+                <label asp-for="AppointmentDate" class="control-label my-2"></label>
+                <div class="text-center">
+                    <input asp-for="AppointmentDate" class="form-control" />
+                </div>
+                <span asp-validation-for="AppointmentDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AppointmentTime" class="control-label"></label>
+                <div>
+                    <input asp-for="AppointmentTime" class="form-control" />
+                </div>
+                <span asp-validation-for="AppointmentTime" class="text-danger"></span>
+            </div>
+            @if (userType == "Doctor")
+            {
+                <div class="form-group my-2">
+                    <label asp-for="Status" class="control-label"></label>
+                    <div class="text-center my-2">
+                        <select id="statusDropdown" asp-for="Status" class="form-control">
+                            <option>Registered</option>
+                            <option>Approved</option>
+                            <option>Cancelled</option>
+                            <option>Completed</option>
+                        </select>
+                    </div>
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
+            }
+
+            <div id="cancellationReasonDiv" class="form-group my-2" style="display:none;">
+                <label asp-for="CancellationReason" class="control-label"></label>
+                <div class="text-center my-2">
+                    <input asp-for="CancellationReason" class="form-control" />
+                </div>
+                <span asp-validation-for="CancellationReason" class="text-danger"></span>
+            </div>
+            <div class="form-group my-2">
+                <label asp-for="PatientHealthIssues" class="control-label"></label>
+                <div class="text-center my-2">
+                    <input asp-for="PatientHealthIssues" class="form-control" />
+                </div>
+                <span asp-validation-for="PatientHealthIssues" class="text-danger"></span>
+            </div>
+            <div class="form-group text-center my-2">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-danger my-2 w-25">Back</a>
+            </div>
+        </form>
+        <div class="text-center my-2">
+            <button type="button" class="btn btn-danger" onclick="cancelAppointment(@Model.AppointmentID)">
+                Cancel Appointment
+            </button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const statusDropdown = document.getElementById("statusDropdown");
+            const cancellationReasonDiv = document.getElementById("cancellationReasonDiv");
+
+            function toggleCancellationReason() {
+                if (statusDropdown.value === "Cancelled") {
+                    cancellationReasonDiv.style.display = "block";
+                } else {
+                    cancellationReasonDiv.style.display = "none";
+                }
+            }
+
+            // Initial check in case the status is already set to "Cancelled"
+            toggleCancellationReason();
+
+            // Add event listener for change events on the dropdown
+            statusDropdown.addEventListener("change", toggleCancellationReason);
+        });
+
+        function cancelAppointment(appointmentId) {
+            if (confirm('Are you sure you want to cancel this appointment?')) {
+                fetch(`/Appointments/CancelAppointment/${appointmentId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert(data.message);
+                            window.location.href = '@Url.Action("Index", "Appointments")';
+                        } else {
+                            alert('An error occurred while cancelling the appointment.');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+        }
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

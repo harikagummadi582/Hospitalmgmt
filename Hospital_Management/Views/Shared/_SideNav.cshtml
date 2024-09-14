@@ -1,0 +1,42 @@
+﻿@{
+    var userType = Context.Session.GetString("UserType");
+}
+
+
+<div class="sidebar">
+    
+    @if (userType == "Admin")
+    {
+        <div class="list-group">
+            <a asp-controller="Home" asp-action="Index" class="list-group-item list-group-item-action"><i class="fa-solid fa-house"></i>   Home</a>
+            <a asp-controller="Admin" asp-action="Index" class="list-group-item list-group-item-action"><i class="fa-solid fa-user"></i>    Users</a>
+            <a asp-controller="Specialties" asp-action="Index" class="list-group-item list-group-item-action"><i class="fa-solid fa-book-bible"></i>    Speciality</a>
+            <a asp-controller="Patients" asp-action="Index" class="list-group-item list-group-item-action"><i class="fa-solid fa-hospital-user"></i>    Patient Details </a>
+            <a asp-controller="Appointments" asp-action="Index" class="list-group-item list-group-item-action"><i class="fa-regular fa-calendar-check"></i>    Appointment</a>
+            <a asp-controller="Doctors" asp-action="Index" class="list-group-item list-group-item-action"><i class="fa-solid fa-user-doctor"></i>  Doctors</a>
+            <a asp-controller="DoctorSpecialties" asp-action="Index" class="list-group-item list-group-item-action"><i class="fa-solid fa-stethoscope"></i>    DoctorsSpeciality</a>
+        </div>
+    }
+
+    
+    @if (userType == "Patient")
+    {
+        <div class="list-group">
+            <a asp-controller="Home" asp-action="Index" class="list-group-item list-group-item-action"><i class="fa-solid fa-house"></i>   Home</a>
+            <a asp-controller="Patients" asp-action="Index" class="list-group-item list-group-item-action"><i class="fa-solid fa-hospital-user"></i>    Register as Patient </a>
+            <a asp-controller="Appointments" asp-action="Index" class="list-group-item list-group-item-action"><i class="fa-regular fa-calendar-check"></i>    Appointment</a>
+            <a asp-controller="Doctors" asp-action="Index" class="list-group-item list-group-item-action"><i class="fa-solid fa-user-doctor"></i>    Doctors</a>
+        </div>
+    }
+
+    
+    @if (userType == "Doctor")
+    {
+        <div class="list-group">
+            <a asp-controller="Home" asp-action="Index" class="list-group-item list-group-item-action"><i class="fa-solid fa-house"></i>   Home</a>
+            <a asp-controller="Appointments" asp-action="Index" class="list-group-item list-group-item-action"><i class="fa-regular fa-calendar-check"></i>    Appointments</a>
+            <a asp-controller="Patients" asp-action="Index" class="list-group-item list-group-item-action"><i class="fa-solid fa-hospital-user"></i>    Patient Details </a>
+            <a asp-controller="Doctors" asp-action="Index" class="list-group-item list-group-item-action"><i class="fa-solid fa-user-doctor"></i>   Doctors</a>
+        </div>
+    }
+</div>

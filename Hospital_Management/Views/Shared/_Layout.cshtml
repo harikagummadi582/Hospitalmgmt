@@ -1,0 +1,87 @@
+﻿@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims;
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    var userName = HttpContextAccessor.HttpContext.User.Identity.Name;
+    var role = User.FindFirstValue(ClaimTypes.Role);
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Hospital_Management</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Hospital_Management.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.2/dist/sweetalert2.all.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.2/dist/sweetalert2.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="~/js/confirmation.js"></script>
+</head>
+<body class="parentbody">
+    <header class="bg-black">
+        <nav class="text-dark  navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-dark border-bottom box-shadow mb-3">
+
+            <span class="text-white btn btn-outline-light fw-bold mx-2" style="white-space: nowrap;"><i class="fa-regular fa-hospital"></i> Novi Hospital</span>
+
+            <div class="row container-fluid mx-5 login-details">
+           
+                <ul class="navbar-nav navitems">
+                   
+                    @if (!string.IsNullOrEmpty(userName))
+                    {
+
+                        <span class=" btn btn-light text-dark mx-1"><span style="white-space: nowrap;" class="fw-bold " style="white-space: nowrap;">@role : </span> @userName</span>
+
+                            <form asp-controller="Account" asp-action="Logout" method="post" class="form-inline">
+                                <button type="submit" class="btn btn-success mx-4 fw-bold">Logout</button>
+                            </form>
+                     
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="btn btn-primary fw-bold" href="/Account/Login">Login</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <div class="container-fluid ">
+        <div class="row">
+            @if (role != null)
+            {
+                <div class="col-md-2">
+                    <partial name="_SideNav" />
+                </div>
+            }
+            <div class="col-md-10">
+                <partial name="_Notification" />
+                <div class="content">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="border-top footer text-muted fw-bold bg-dark">
+        <div class="container">
+            &copy; 2024 - Novi Hospital
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

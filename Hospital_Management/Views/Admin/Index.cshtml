@@ -1,0 +1,55 @@
+﻿@model IEnumerable<Hospital_Management.Models.User>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="text-center">
+    <h2>Users List</h2>
+</div>
+
+<p>
+    <a asp-action="Register" asp-controller="Account" class="btn btn-success">Create New User</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead class="thead-dark">
+        <tr class="text-center">
+            <th>User ID</th>
+            <th>User Name</th>
+            <th>User Email</th>
+            <th>Phonenumber</th>
+            <th>Role</th>
+            <th>Modify</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var obj in Model)
+        {
+            <tr>
+                <td>@obj.UserID</td>
+                <td>@obj.Username</td>
+                <td>@obj.Email</td>
+                <td>@obj.PhoneNumber</td>
+                <td>@obj.UserType</td>
+                <td class="text-center">
+                    <div class="w-75 btn-group" role="group">
+                        <a asp-controller="Admin" asp-action="Edit" asp-route-id="@obj.UserID" class="btn btn-primary mx-2">
+                            <i class="bi bi-pen-fill"></i>Edit
+                        </a>
+
+                        <button type="button" class="btn btn-danger mx-2" onclick="ConfirmationAlert('@Url.Action("Delete", "Admin", new { id = obj.UserID })')">
+                            <i class="bi bi-trash-fill"></i> Delete
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        // Other page-specific scripts can go here
+    </script>
+}

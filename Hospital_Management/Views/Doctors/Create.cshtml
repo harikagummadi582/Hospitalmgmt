@@ -1,0 +1,89 @@
+﻿@model Hospital_Management.Models.Doctor
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h4 class="card-title text-center mb-4">Doctor Details</h4>
+                    <form asp-action="Create">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        <div class="form-group mb-3">
+                            <label asp-for="UserID" class="form-label"></label>
+                            <select asp-for="UserID" class="form-select" asp-items="ViewBag.UserID"></select>
+                            <span asp-validation-for="UserID" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Name" class="form-label"></label>
+                            <input asp-for="Name" id="doctorName" class="form-control" readonly />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Gender" class="form-label"></label>
+                            <select asp-for="Gender" class="form-select" >
+                                <option>Male</option>
+                                <option>Female</option>
+                            </select>
+                            <span asp-validation-for="Gender" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Experience" class="form-label"></label>
+                            <input asp-for="Experience" class="form-control" />
+                            <span asp-validation-for="Experience" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="AboutDoctor" class="form-label"></label>
+                            <textarea asp-for="AboutDoctor" class="form-control"></textarea>
+                            <span asp-validation-for="AboutDoctor" class="text-danger"></span>
+                        </div>
+                        <div class="d-grid">
+                            <input type="submit" value="Create" class="btn btn-primary" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+       
+        function populateNameField(userId) {
+            if (userId) {
+                $.ajax({
+                    url: '/Doctors/GetDoctorName/' + userId,
+                    type: 'GET',
+                    success: function (data) {
+                        $('#doctorName').val(data);
+                    },
+                    error: function () {
+                        $('#doctorName').val('');
+                    }
+                });
+            } else {
+                $('#doctorName').val('');
+            }
+        }
+
+        $(document).ready(function () {
+            
+            var initialUserId = $('#UserID').val();
+            
+            populateNameField(initialUserId);
+            $('#UserID').change(function () {
+                var userId = $(this).val();
+                populateNameField(userId);
+            });
+        });
+    </script>
+
+}

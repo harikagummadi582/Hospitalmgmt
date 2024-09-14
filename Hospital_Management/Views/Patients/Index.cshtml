@@ -1,0 +1,66 @@
+﻿@model IEnumerable<Hospital_Management.Models.Patient>
+
+@{
+    ViewData["Title"] = "Index";
+    var userType = Context.Session.GetString("UserType");
+}
+
+<div class="text-center">
+    <h2>Patients</h2>
+</div>
+
+@if(userType != "Doctor")
+{
+    <p>
+        <a class="btn btn-success" asp-action="Create">Create New</a>
+    </p>
+}
+
+<table class="table table-bordered table-striped">
+    <thead class="text-dark">
+        <tr class="text-center">
+            @*<th>Email</th>*@
+            <th>Name</th>
+            <th>DOB</th>
+            <th>Gender</th>
+            <th>Blood Group</th>
+            <th>Address</th>
+            <th>Modify</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var obj in Model)
+        {
+            <tr class="text-center">
+               @* <td>@obj.User.Email</td>*@
+                <td>@obj.Name</td>
+                
+                <td>@obj.DOB</td>
+                <td>@obj.Gender</td>
+                <td>@obj.BloodGroup</td>
+                <td>@obj.Address</td>
+
+                <td class="text-center">
+                    <div class="w-75 btn-group" role="group">
+                        <a asp-action="Edit" asp-route-id="@obj.PatientID" class="btn btn-primary mx-2">
+                            <i class="bi bi-pen-fill"></i>Edit
+                        </a>
+
+                        <button type="button" class="btn btn-danger mx-2" onclick="ConfirmationAlert('@Url.Action("Delete", "Patients", new { id = obj.PatientID })')">
+                            <i class="bi bi-trash-fill"></i> Delete
+                        </button>
+                    </div>
+                </td>
+
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        // Other page-specific scripts can go here
+    </script>
+}

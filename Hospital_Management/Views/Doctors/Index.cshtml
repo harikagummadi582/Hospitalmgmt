@@ -1,0 +1,79 @@
+﻿@model IEnumerable<Hospital_Management.Models.Doctor>
+
+@{
+    ViewData["Title"] = "Index";
+    var userType = Context.Session.GetString("UserType");
+}
+
+<div class="text-center my-2">
+    <h2>Doctors List</h2>
+</div>
+@if (userType == "Admin")
+{
+    <p>
+        <a asp-action="Create" class="btn btn-success">Add Doctor</a>
+    </p>
+}
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr class="text-center">
+            <th>Email</th>
+            <th>Name</th>
+            <th>Gender</th>
+            <th>Experience</th>
+            <th>About</th>
+            <th>Specialization</th>
+            <th>Number</th>
+            @if(userType == "Admin"){
+                <th>Modify</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var obj in Model)
+        {
+            <tr>
+                <td>@obj.User.Email</td>
+                <td>@obj.Name</td>
+                <td>@obj.Gender</td>
+                <td>@obj.Experience</td>
+                <td>@obj.AboutDoctor</td>
+                <td>
+                    @if (obj.DoctorSpecialties != null)
+                    {
+                        foreach (var specialty in obj.DoctorSpecialties)
+                        {
+                            @Html.DisplayFor(modelItem => specialty.Specialty.SpecialtyName)
+                        }
+                    }
+                    else
+                    {
+                        <span>No specializations</span>
+                    }
+                </td>
+                <td>@obj.User.PhoneNumber</td>
+                @if(userType == "Admin")
+                {
+                    <td class="text-center">
+                        <div class="w-75 btn-group" role="group">
+                            <a asp-action="Edit" asp-route-id="@obj.DoctorID" class="btn btn-primary mx-2">
+                                <i class="bi bi-pen-fill"></i>Edit
+                            </a>
+
+                            <button type="button" class="btn btn-danger mx-2" onclick="ConfirmationAlert('@Url.Action("Delete", "Doctors", new { id = obj.DoctorID })')">
+                                <i class="bi bi-trash-fill"></i> Delete
+                            </button>
+                        </div>
+                    </td>
+                }
+                
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

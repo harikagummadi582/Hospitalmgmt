@@ -1,0 +1,38 @@
+﻿@model Hospital_Management.Models.Specialty
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="text-center">Add Specialization</h2>
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group my-3 text-center">
+                    <label asp-for="SpecialtyName" class="control-label my-2">Specialty Name</label>
+                    
+                     <input asp-for="SpecialtyName" class="form-control ml-5" />
+                 
+                    <span asp-validation-for="SpecialtyName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-primary w-25">Create Specialty</button>
+                    <a asp-action="Index" class="btn btn-danger w-25">Back to List</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

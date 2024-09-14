@@ -1,0 +1,71 @@
+﻿@model Hospital_Management.Models.Patient
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+
+}
+@{
+    var userName = HttpContextAccessor.HttpContext.User.Identity.Name;
+    
+}
+
+
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <h2 class="text-center">Add Patient</h2>
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group my-2">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" value="@userName" readonly />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group my-2">
+                <label asp-for="DOB" class="control-label"></label>
+                <input asp-for="DOB" class="form-control" />
+                <span asp-validation-for="DOB" class="text-danger"></span>
+            </div>
+            <div class="form-group my-2">
+                <label asp-for="Gender" class="control-label"></label>
+                <select asp-for="Gender" class="form-control">
+                    <option>Male</option>
+                    <option>Female</option>
+                </select>
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+            <div class="form-group my-2">
+                <label asp-for="BloodGroup" class="control-label"></label>
+                <select asp-for="BloodGroup" class="form-control"> 
+                    <option>A +ve</option>
+                    <option>A -ve</option>
+                    <option>B +ve</option>
+                    <option>B -ve</option>
+                    <option>AB +ve</option>
+                    <option>AB -ve</option>
+                    <option>O +ve</option>
+                    <option>O -ve</option>
+                </select>
+                <span asp-validation-for="BloodGroup" class="text-danger"></span>
+            </div>
+            <div class="form-group my-2">
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="form-group my-2">
+                <input type="submit" value="Create" class="btn btn-primary" />
+                <a class="btn btn-danger"asp-action="Index">Back </a>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
